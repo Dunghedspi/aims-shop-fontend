@@ -1,18 +1,17 @@
 /* eslint-disable react/display-name */
+import HomeSection from "pages/HomePage/Sections/HomeSection";
 import React from "react";
 
 import HomePage from "../pages/HomePage";
 import ResetPassPage from "../pages/ResetPassPage";
 import SignIn from "../pages/SignInPage";
 import SignUp from "../pages/SignUpPage";
-
+import CartPage from "pages/CartPage";
+import ProductPage from "pages/ProductPage";
+import ProductDetailPage from "pages/ProductDetailPage";
+import OrderPage from "pages/OrderPage";
+import OrderListPage from "pages/OrderListPage";
 export const MainRoute = [
-	{
-		name: "homePage",
-		path: "/",
-		exact: true,
-		component: () => <HomePage />,
-	},
 	{
 		name: "resetPassword",
 		path: "/resetpassword",
@@ -30,5 +29,50 @@ export const MainRoute = [
 		path: "/signup",
 		exact: true,
 		component: () => <SignUp />,
+	},
+	{
+		name: "homePage",
+		path: "/",
+		exact: false,
+		component: () => <HomePage />,
+	},
+];
+
+export const HomeRouter = [
+	{
+		name: "CartPage",
+		path: "/cart",
+		exact: true,
+		component: () => <CartPage />,
+	},
+	{
+		name: "HomePage",
+		path: "/",
+		exact: true,
+		component: () => <HomeSection />,
+	},
+	{
+		name: "ProductPage",
+		path: "/product/",
+		exact: true,
+		component: () => <ProductPage />,
+	},
+	{
+		name: "ProductsDetail",
+		path: "/productDetail",
+		exact: true,
+		component: () => <ProductDetailPage />,
+	},
+	{
+		name: "checkout",
+		path: "/checkout",
+		exact: true,
+		component: () => <OrderPage />,
+	},
+	{
+		name: "orders",
+		path: "/orders",
+		exact: true,
+		component: () => <OrderListPage />,
 	},
 ];

@@ -1,57 +1,75 @@
 /* eslint-disable no-undef */
-import React from "react";
-// @material-ui/core components
-import { makeStyles } from "@material-ui/core/styles";
-import classNames from "classnames";
+import { Fade } from "@material-ui/core";
+import Backdrop from "@material-ui/core/Backdrop";
+import Modal from "@material-ui/core/Modal";
+import styles from "assets/jss/pages/HomePage.js";
 // @material-ui/icons
 import Footer from "components/Footer/Footer.js";
-import GridContainer from "components/Grid/GridContainer.js";
-import GridItem from "components/Grid/GridItem.js";
-import Parallax from "components/Parallax/Parallax.js";
-import styles from "assets/jss/pages/HomePage.js";
-import slides from "assets/img/landing-bg.jpg";
-import SectionNavbars from "../components/Sections/SectionNavbars";
-import ProductSection from "./Sections/ProductSection";
-import TeamSection from "./Sections/TeamSection";
-
-const useStyles = makeStyles(styles);
+import React, { useState } from "react";
+import SectionNavbars from "../components/Sections/AppBarSection";
+import SignInPage from "../SignInPage";
+import { Switch, Route } from "react-router-dom";
+import { HomeRouter } from "routes";
+const renderRoute = (routes) => {
+	return routes.map((item, index) => (
+		<Route
+			key={index}
+			path={item.path}
+			name={item.name}
+			exact={item.exact}
+			component={item.component}
+		/>
+	));
+};
 
 export default function HomePage() {
-	const classes = useStyles();
+	const [isLogin, setIsLogin] = useState(true);
+	const [open, setOpen] = React.useState(false);
+	// const handleOpen = () => {
+	// 	setOpen(true);
+	// };
+	const handleClose = () => {
+		setOpen(false);
+	};
+	const classes = styles();
 	return (
 		<div>
-			<SectionNavbars
-				color="white"
-				fixed
-				changeColorOnScroll={{
-					height: 400,
-					color: "white",
+			<Modal
+				aria-labelledby="transition-modal-title"
+				aria-describedby="transition-modal-description"
+				className={classes.modal}
+				open={open}
+				onClose={handleClose}
+				closeAfterTransition
+				BackdropComponent={Backdrop}
+				BackdropProps={{
+					timeout: 500,
 				}}
-			/>
-			<Parallax filter image={slides}>
-				<div className={classes.container}>
-					<GridContainer>
-						<GridItem xs={12} sm={12} md={6}>
-							<h1 className={classes.title}>
-								Your Story Starts With Us.
-							</h1>
-							<h4>
-								Every landing page needs a small description
-								after the big bold title, that{"'"}s why we
-								added this text here. Add here all the
-								information that can make you or your product
-								create the first impression.
-							</h4>
-						</GridItem>
-					</GridContainer>
-				</div>
-			</Parallax>
-			<div className={classNames(classes.main, classes.mainRaised)}>
-				<div className={classes.container}>
-					<ProductSection />
-					<TeamSection />
-				</div>
+			>
+				<Fade in={open}>
+					<div className={classes.paper}>
+						<SignInPage />
+					</div>
+				</Fade>
+			</Modal>
+			<div className={classes.headerBox}>
+				<SectionNavbars
+					color="white"
+					fixed
+					changeColorOnScroll={{
+						height: 400,
+						color: "white",
+					}}
+					login={{
+						isLogin,
+						setIsLogin,
+					}}
+				/>
 			</div>
+			<div className={classes.body}>
+				<Switch>{renderRoute(HomeRouter)}</Switch>
+			</div>
+
 			<Footer />
 		</div>
 	);

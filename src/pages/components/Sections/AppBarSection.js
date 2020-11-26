@@ -2,22 +2,23 @@
 /* eslint-disable quotes */
 /* eslint-disable no-undef */
 // /* eslint-disable quotes */
-import ShoppingCartOutlinedIcon from "@material-ui/icons/ShoppingCartOutlined";
 import AppBar from "@material-ui/core/AppBar";
 import IconButton from "@material-ui/core/IconButton";
 import InputBase from "@material-ui/core/InputBase";
 import { makeStyles } from "@material-ui/core/styles";
 import Toolbar from "@material-ui/core/Toolbar";
-import Typography from "@material-ui/core/Typography";
+// import Typography from "@material-ui/core/Typography";
 import SearchIcon from "@material-ui/icons/Search";
 import LinkCustom from "components/ControlCustom/Link";
 import CustomDropdown from "components/CustomDropdown/CustomDropdown";
 import React, { useState } from "react";
 import profileImage from "assets/img/faces/avatar.jpg";
-import ListItem from "@material-ui/core/ListItem";
-import List from "@material-ui/core/List";
 import { Link } from "react-router-dom";
 import classNames from "classnames";
+import { List, ListItem } from "@material-ui/core";
+import Button from "components/CustomButtons/Button";
+import CustomShoppingIcon from "./CartIconSection";
+import LinkControl from "components/ControlCustom/Link";
 const useStyles = makeStyles((theme) => ({
 	root: {
 		flexGrow: 1,
@@ -26,6 +27,7 @@ const useStyles = makeStyles((theme) => ({
 			borderRadius: "0 0 5px 5px",
 			backgroundColor: "white!important",
 		},
+		padding: "0!important",
 	},
 	name: {
 		fontSize: "16px",
@@ -64,9 +66,10 @@ const useStyles = makeStyles((theme) => ({
 		"& > div > div > button": {
 			top: "0!important",
 		},
+		padding: "0 0 0 5px",
 	},
 	img: {
-		width: "40px",
+		width: "30px",
 		height: "auto",
 		borderRadius: "50%",
 	},
@@ -126,19 +129,15 @@ const useStyles = makeStyles((theme) => ({
 		margin: "0 0 0 2%",
 	},
 	list: {
-		fontSize: "14px",
 		margin: 0,
-		paddingLeft: "0",
+		padding: "0!important",
 		listStyle: "none",
-		paddingTop: "0",
-		paddingBottom: "0",
 		color: "inherit",
 		display: "flex",
 		alignItems: "center",
-		justifyContent: "center",
-		flexFlow: "row wrap",
+		justifyContent: "flex-end",
+		flexFlow: "row nowrap",
 		flexGrow: "18",
-		padding: "0",
 	},
 	listItem: {
 		float: "left",
@@ -165,24 +164,37 @@ const useStyles = makeStyles((theme) => ({
 			marginLeft: "0!important",
 			border: "none",
 		},
+		"&>button": {
+			padding: "0!important",
+			minWidth: "50px",
+		},
 	},
 	link: {
 		color: "black!important",
 		"&:hover": {
 			textDecoration: "none",
 		},
+		textDecoration: "none",
 	},
 	boxHeader: {
 		display: "flex",
 		flexFlow: "row wrap",
 		alignItems: "center",
 	},
-	"@media (max-width: 600px)": {
-		list: { order: 4 },
+	"@media (max-width: 900px)": {
+		list: {
+			order: 4,
+			justifyContent: "space-between",
+			"&>button": {
+				padding: "0!important",
+				minWidth: "50px",
+				fontSize: "13px",
+			},
+		},
 		boxLogo: { flex: "20%" },
 		right: { flex: "60%" },
 		boxProduct: { flex: "100%" },
-		link: { fontSize: "18px" },
+		link: { fontSize: "13px" },
 		inputInput: {
 			padding: theme.spacing(1, 1, 1, 0),
 			paddingLeft: `calc(1em + ${theme.spacing(4)}px)`,
@@ -194,6 +206,16 @@ const useStyles = makeStyles((theme) => ({
 					width: "5ch",
 				},
 			},
+		},
+	},
+	"@media (max-width: 600px)": {
+		listItem: {
+			"& > div > div > button": {
+				fontSize: "10px",
+			},
+		},
+		link: {
+			fontSize: "10px",
 		},
 	},
 	boxLogo: {
@@ -211,20 +233,6 @@ const useStyles = makeStyles((theme) => ({
 		alignItems: "center",
 		flexGrow: "2",
 		paddingRight: "10px",
-	},
-	boxProduct: {
-		display: "flex",
-		justifyContent: "flex-end",
-		flexFlow: "row nowrap",
-		alignItems: "center",
-		flexGrow: "2",
-	},
-	service: {
-		display: "flex",
-		justifyContent: "flex-start",
-		flexFlow: "row nowrap",
-		alignItems: "center",
-		flexGrow: "2",
 	},
 	absolute: {
 		position: "absolute",
@@ -246,9 +254,24 @@ const useStyles = makeStyles((theme) => ({
 	},
 	unshow: {
 		top: 0,
-		transform: "translateY(-100px)",
+		transform: "translateY(-110px)",
 	},
 }));
+
+const listDownNotLogin = [
+	<LinkControl
+		path="/signin"
+		menu={true}
+		label={<div>SignIn</div>}
+		key={1}
+	/>,
+	<LinkControl
+		path="/signup"
+		menu={true}
+		label={<div>SignUp</div>}
+		key={2}
+	/>,
+];
 
 export default function SectionNavbars(props) {
 	const [pYOffsetPrev, setPYOffsetPrev] = useState(0);
@@ -266,7 +289,6 @@ export default function SectionNavbars(props) {
 	const headerColorChange = () => {
 		const { changeColorOnScroll } = props;
 		const windowsScrollTop = window.pageYOffset;
-		console.log(windowsScrollTop, pYOffsetPrev);
 		if (windowsScrollTop > pYOffsetPrev) {
 			document.body
 				.getElementsByTagName("header")[0]
@@ -296,7 +318,7 @@ export default function SectionNavbars(props) {
 		<div className={classes.root}>
 			<AppBar
 				position="static"
-				className={(classes.appbar, appBarClasses)}
+				className={(classes.appbar, appBarClasses, classes.fixed)}
 			>
 				<Toolbar className={classes.boxHeader}>
 					<div className={classes.boxLogo}>
@@ -322,71 +344,72 @@ export default function SectionNavbars(props) {
 						</Link>
 					</div>
 					<List className={classes.list}>
-						<div className={classes.boxProduct}>
-							<ListItem className={classes.listItem}>
-								<CustomDropdown
-									left
-									caret={false}
-									hoverColor="black"
-									dropdownHeader="Products Physical"
-									buttonText={<h4>{"Products Physical"}</h4>}
-									buttonProps={{
-										className:
-											classes.navLink +
-											" " +
-											classes.imageDropdownButton,
-										color: "transparent",
-									}}
-									dropdownList={["BOOK", "DVD", "CD", "LP"]}
-								/>
-							</ListItem>
-							<ListItem className={classes.listItem}>
-								<CustomDropdown
-									left
-									caret={false}
-									hoverColor="black"
-									dropdownHeader="Products Digital"
-									buttonText={<h4>{"Products Digital"}</h4>}
-									buttonProps={{
-										className:
-											classes.navLink +
-											" " +
-											classes.imageDropdownButton,
-										color: "transparent",
-									}}
-									dropdownList={[
-										"BOOK",
-										"MOVIE",
-										"ALBUM",
-										"CP",
-									]}
-								/>
-							</ListItem>
-						</div>
-						<div className={classes.service}>
-							<ListItem className={classes.listItem}>
-								<Typography variant="h6" noWrap>
-									<Link
-										to="/"
-										name="home"
-										className={classes.link}
-									>
-										<h6>TRENDING</h6>
-									</Link>
-								</Typography>
-							</ListItem>
-							<ListItem className={classes.listItem}>
-								<Typography variant="h6" noWrap>
-									<Link
-										to="/"
-										name="home"
-										className={classes.link}
-									>
-										<h6>SALE</h6>
-									</Link>
-								</Typography>
-							</ListItem>
-						</div>
+						<ListItem className={classes.listItem}>
+							<CustomDropdown
+								left
+								caret={false}
+								hoverColor="black"
+								dropdownHeader="Products Physical"
+								buttonText={<h4>{"Products Physical"}</h4>}
+								buttonProps={{
+									className:
+										classes.navLink +
+										" " +
+										classes.imageDropdownButton,
+									color: "transparent",
+								}}
+								dropdownList={["BOOK", "DVD", "CD", "LP"]}
+							/>
+						</ListItem>
+						<ListItem className={classes.listItem}>
+							<CustomDropdown
+								left
+								caret={false}
+								hoverColor="black"
+								dropdownHeader="Products Digital"
+								buttonText={<h4>{"Products Digital"}</h4>}
+								buttonProps={{
+									className:
+										classes.navLink +
+										" " +
+										classes.imageDropdownButton,
+									color: "transparent",
+								}}
+								dropdownList={["BOOK", "MOVIE", "ALBUM", "CP"]}
+							/>
+						</ListItem>
+						<ListItem className={classes.listItem}>
+							<Button
+								aria-label="Notifications"
+								aria-haspopup="true"
+								className={classes.navLink}
+								color="transparent"
+							>
+								<Link
+									to="/"
+									name="home"
+									className={classes.link}
+								>
+									<h4>TRENDING</h4>
+								</Link>
+							</Button>
+						</ListItem>
+						<ListItem className={classes.listItem}>
+							<Button
+								aria-label="Notifications"
+								aria-haspopup="true"
+								className={classes.navLink}
+								color="transparent"
+							>
+								<Link
+									to="/"
+									name="home"
+									className={classes.link}
+								>
+									<h4>SALE</h4>
+								</Link>
+							</Button>
+						</ListItem>
 					</List>
 					<div className={classes.right}>
 						<div className={classes.search}>
@@ -422,11 +445,7 @@ export default function SectionNavbars(props) {
 										classes.imageDropdownButton,
 									color: "transparent",
 								}}
-								dropdownList={[
-									"Me",
-									"Settings and other stuff",
-									"Sign out",
-								]}
+								dropdownList={listDownNotLogin}
 							/>
 						</div>
 						<div className={classes.cartBox}>
@@ -437,9 +456,9 @@ export default function SectionNavbars(props) {
 								aria-label="open drawer"
 							>
 								<LinkCustom
-									path="/"
-									name="home"
-									label={<ShoppingCartOutlinedIcon />}
+									path={`/cart`}
+									name="cart"
+									label={<CustomShoppingIcon />}
 								/>
 							</IconButton>
 						</div>
