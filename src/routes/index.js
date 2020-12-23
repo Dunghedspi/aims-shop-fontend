@@ -11,6 +11,7 @@ import ProductPage from "pages/ProductPage";
 import ProductDetailPage from "pages/ProductDetailPage";
 import OrderPage from "pages/OrderPage";
 import OrderListPage from "pages/OrderListPage";
+import AccountPage from "pages/AccountPage";
 export const MainRoute = [
 	{
 		name: "resetPassword",
@@ -53,7 +54,7 @@ export const HomeRouter = [
 	},
 	{
 		name: "ProductPage",
-		path: "/product/",
+		path: "/product",
 		exact: true,
 		component: () => <ProductPage />,
 	},
@@ -72,7 +73,13 @@ export const HomeRouter = [
 	{
 		name: "orders",
 		path: "/orders",
-		exact: true,
+		exact: false,
 		component: () => <OrderListPage />,
+	},
+	{
+		name: "account",
+		path: "/user/setting",
+		exact: false,
+		component: () => <AccountPage />,
 	},
 ];

@@ -19,6 +19,7 @@ import { List, ListItem } from "@material-ui/core";
 import Button from "components/CustomButtons/Button";
 import CustomShoppingIcon from "./CartIconSection";
 import LinkControl from "components/ControlCustom/Link";
+import logo from "assets/img/logo/icon1.svg";
 const useStyles = makeStyles((theme) => ({
 	root: {
 		flexGrow: 1,
@@ -260,13 +261,13 @@ const useStyles = makeStyles((theme) => ({
 
 const listDownNotLogin = [
 	<LinkControl
-		path="/signin"
+		path="/auth/signin"
 		menu={true}
 		label={<div>SignIn</div>}
 		key={1}
 	/>,
 	<LinkControl
-		path="/signup"
+		path="/auth/signup"
 		menu={true}
 		label={<div>SignUp</div>}
 		key={2}
@@ -332,7 +333,7 @@ export default function SectionNavbars(props) {
 								name="home"
 								label={
 									<img
-										src="./logo/icon1.svg"
+										src={logo}
 										className={classes.logo}
 										alt="logo"
 									/>

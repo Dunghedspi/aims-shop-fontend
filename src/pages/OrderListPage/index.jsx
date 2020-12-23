@@ -1,8 +1,8 @@
 import React from "react";
 import { makeStyles } from "@material-ui/core";
 import { Route, Switch, useRouteMatch } from "react-router-dom";
-import OrderItemSection from "./Sections/OrderItemSection";
 import OrderListSections from "./Sections/OrderListSection";
+import OrderDetails from "./Sections/OrderDetailsSection";
 const useStyles = makeStyles(() => ({}));
 function index() {
 	const classes = useStyles();
@@ -14,14 +14,13 @@ function index() {
 				<Route
 					path={`${match.url}/`}
 					component={() => <OrderListSections />}
-					//exact={true}
-				/>
-				<Route
-					path={`${match.url}/m`}
-					component={() => <OrderItemSection />}
 					exact={true}
 				/>
-				<Route />
+				<Route
+					path={`${match.url}/:id`}
+					component={() => <OrderDetails />}
+					exact={true}
+				/>
 			</Switch>
 		</div>
 	);

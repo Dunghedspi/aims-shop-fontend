@@ -15,6 +15,9 @@ import LinkControl from "../../components/ControlCustom/Link";
 import FormRadio from "../../components/ControlCustom/radio/index.js";
 import { radioGroupOptions } from "../../constansts/gender";
 import { useStyles } from "./styles.js";
+import { UserApi } from "apis/UserApi";
+import { useNavigate } from "react-router-dom";
+import { useSelector } from "react-redux";
 
 const schema = yup.object().shape({
 	email: yup.string().required().email(),
@@ -27,17 +30,29 @@ const schema = yup.object().shape({
 			/\(?([0-9]{3})\)?([ .-]?)([0-9]{3})\2([0-9]{4})/,
 			"Invalid phone number"
 		),
-	gender: yup.string().required(),
+	sex: yup.string().required(),
 });
 
-const SignUp = () => {
+const SignUpPage = () => {
 	const classes = useStyles();
+	const navigate = useNavigate();
+	const email = useSelector((state) => state.UserReducers.email);
+	React.useEffect(() => {
+		if (email) {
+			navigate("/");
+		}
+	}, []);
 	const { register, control, handleSubmit, errors } = useForm({
 		validationSchema: schema,
 		mode: "onBlur",
 	});
-	const onSubmit = (data, e) => console.log(data, e, 1);
-	const onError = (error, e) => console.log(error, e);
+	const onSubmit = async (data) => {
+		const isSignUp = await UserApi.SignUp(data);
+		if (isSignUp) {
+			navigate("/signin");
+		}
+	};
+	const onError = (error) => console.log(error);
 	return (
 		<Container component="main" maxWidth="xs">
 			<div className={classes.paper}>
@@ -59,8 +74,8 @@ const SignUp = () => {
 						fullWidth
 						id="fullname"
 						label="Full Name"
-						name="name"
-						autoComplete="name"
+						name="fullName"
+						autoComplete="fullName"
 						autoFocus
 						size="small"
 						errorobj={errors}
@@ -114,7 +129,7 @@ const SignUp = () => {
 					<Grid container>
 						<Grid item sm={6}>
 							<FormRadio
-								name="gender"
+								name="sex"
 								label="Gender"
 								options={radioGroupOptions}
 								control={control}
@@ -123,11 +138,11 @@ const SignUp = () => {
 						</Grid>
 						<Grid item md={6}>
 							<FormInput
-								name="birthday"
+								name="dateOfBirth"
 								id="date"
 								label="Birthday"
 								type="date"
-								defaultValue="2016-12-29"
+								value="2016-12-29"
 								className={classes.textField}
 								InputLabelProps={{
 									shrink: true,
@@ -161,4 +176,4 @@ const SignUp = () => {
 		</Container>
 	);
 };
-export default SignUp;
+export default SignUpPage;

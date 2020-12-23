@@ -1,28 +1,19 @@
 import React from "react";
-import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
+import { useRoutes } from "react-router-dom";
+import routes from "routes.js";
+import ScrollTop from "pages/components/SrcollTop";
 import CssBaseline from "@material-ui/core/CssBaseline";
-import { MainRoute } from "../routes";
-
-const renderRoute = (routes) => {
-	return routes.map((item, index) => (
-		<Route
-			key={index}
-			path={item.path}
-			name={item.name}
-			exact={item.exact}
-			component={item.component}
-		/>
-	));
-};
 
 const App = () => {
+	const routing = useRoutes(routes);
+	console.log(routing);
 	return (
 		<React.Fragment>
 			<CssBaseline />
-			<Router>
-				<Switch>{renderRoute(MainRoute)}</Switch>
-			</Router>
+			<ScrollTop />
+			{routing}
 		</React.Fragment>
 	);
 };
+
 export default App;

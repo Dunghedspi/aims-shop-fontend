@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 /* eslint-disable no-prototype-builtins */
 /* eslint-disable react/prop-types */
 /* eslint-disable react/display-name */
@@ -14,20 +15,38 @@ import FormInput from "components/ControlCustom/input";
 import LinkControl from "components/ControlCustom/Link";
 import { useStyles } from "./styles.js";
 import * as yup from "yup";
-import { UserApi } from "apis/Users";
-
+import { UserApi } from "apis/UserApi";
+import { useNavigate } from "react-router-dom";
+import { SetInfo } from "actions/UserAction";
+import { useDispatch, useSelector } from "react-redux";
+import Page from "components/Page/index.js";
+import { toastifySuccess } from "helpers/toastify";
+import "react-toastify/dist/ReactToastify.css";
+// import { toast } from "react-toastify";
+// toast.configure();
 //Validate schema
 const schema = yup.object().shape({
 	email: yup.string().email(),
 	password: yup.string().required(),
 });
 
-const SignIn = () => {
+const SignInPage = () => {
+	const dispatch = useDispatch();
+	const navigate = useNavigate();
+	const email = useSelector((state) => state.UserReducers.email);
+	React.useEffect(() => {
+		if (email) {
+			navigate("/");
+		}
+	}, []);
 	const onSubmit = async (data) => {
 		try {
-			console.log(data);
 			const response = await UserApi.SignIn(data);
-			console.log(response);
+			if (response) {
+				dispatch(SetInfo(response));
+				navigate("/");
+				toastifySuccess("Login Success");
+			}
 		} catch (error) {
 			console.error(error);
 		}
@@ -36,83 +55,85 @@ const SignIn = () => {
 	const classes = useStyles();
 	const methods = useForm({
 		validationSchema: schema,
-		mode: "onBlur",
+		mode: "onSubmit",
 	});
 	const { handleSubmit, errors, register, control } = methods;
 	return (
-		<Container component="main" maxWidth="xs">
-			<div className={classes.paper}>
-				<Avatar className={classes.avatar}>
-					<LockOutlinedIcon />
-				</Avatar>
-				<Typography component="h1" variant="h5">
-					Sign in
-				</Typography>
-				<form
-					className={classes.form}
-					onSubmit={handleSubmit(onSubmit, onError)}
-				>
-					<FormInput
-						variant="outlined"
-						margin="normal"
-						required
-						fullWidth
-						id="email"
-						label="Email Address"
-						name="email"
-						autoComplete="email"
-						autoFocus
-						errorobj={errors}
-						inputRef={register}
-						control={control}
-					/>
-
-					<FormInput
-						variant="outlined"
-						margin="normal"
-						required
-						fullWidth
-						name="password"
-						label="Password"
-						type="password"
-						id="password"
-						autoComplete="current-password"
-						errorobj={errors}
-						inputRef={register}
-						control={control}
-					/>
-					<FormCheckBox
-						name="remember"
-						label="Remember me"
-						color={"primary"}
-						inputRef={register}
-					/>
-					<Button
-						type="submit"
-						fullWidth
-						variant="contained"
-						color="primary"
-						className={classes.submit}
+		<Page title="Sign In">
+			<Container component="main" maxWidth="xs">
+				<div className={classes.paper}>
+					<Avatar className={classes.avatar}>
+						<LockOutlinedIcon />
+					</Avatar>
+					<Typography component="h1" variant="h5">
+						Sign in
+					</Typography>
+					<form
+						className={classes.form}
+						onSubmit={handleSubmit(onSubmit, onError)}
 					>
-						Sign In
-					</Button>
-					<Grid container>
-						<Grid item xs>
-							<LinkControl
-								path={"/resetpassword"}
-								label={"Forgot password?"}
-							/>
+						<FormInput
+							variant="outlined"
+							margin="normal"
+							required
+							fullWidth
+							id="email"
+							label="Email Address"
+							name="email"
+							autoComplete="email"
+							autoFocus
+							errorobj={errors}
+							inputRef={register}
+							control={control}
+						/>
+
+						<FormInput
+							variant="outlined"
+							margin="normal"
+							required
+							fullWidth
+							name="password"
+							label="Password"
+							type="password"
+							id="password"
+							autoComplete="current-password"
+							errorobj={errors}
+							inputRef={register}
+							control={control}
+						/>
+						<FormCheckBox
+							name="remember"
+							label="Remember me"
+							color={"primary"}
+							inputRef={register}
+						/>
+						<Button
+							type="submit"
+							fullWidth
+							variant="contained"
+							color="primary"
+							className={classes.submit}
+						>
+							Sign In
+						</Button>
+						<Grid container>
+							<Grid item xs>
+								<LinkControl
+									path={"/reset-password"}
+									label={"Forgot password?"}
+								/>
+							</Grid>
+							<Grid item>
+								<LinkControl
+									path={"/signup"}
+									label={"Don't have an account? Sign Up"}
+								/>
+							</Grid>
 						</Grid>
-						<Grid item>
-							<LinkControl
-								path={"/signup"}
-								label={"Don't have an account? Sign Up"}
-							/>
-						</Grid>
-					</Grid>
-				</form>
-			</div>
-		</Container>
+					</form>
+				</div>
+			</Container>
+		</Page>
 	);
 };
-export default SignIn;
+export default SignInPage;

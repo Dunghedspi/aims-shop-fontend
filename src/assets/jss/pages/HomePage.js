@@ -1,7 +1,7 @@
 import { makeStyles } from "@material-ui/core";
 import { container, title } from "assets/jss/theme.js";
 
-const HomePageStyle = makeStyles((theme) => ({
+const HomePageStyle = makeStyles(() => ({
 	container: {
 		zIndex: "12",
 		color: "#FFFFFF",
@@ -32,16 +32,13 @@ const HomePageStyle = makeStyles((theme) => ({
 		boxShadow:
 			"0 16px 24px 2px rgba(0, 0, 0, 0.14), 0 6px 30px 5px rgba(0, 0, 0, 0.12), 0 8px 10px -5px rgba(0, 0, 0, 0.2)",
 	},
-	modal: {
+	center: {
 		display: "flex",
-		alignItems: "center",
+		flexDirection: "column",
 		justifyContent: "center",
 	},
-	paper: {
-		backgroundColor: theme.palette.background.paper,
-		border: "2px solid #000",
-		boxShadow: theme.shadows[5],
-		padding: theme.spacing(2, 4, 3),
+	card: {
+		maxWidth: "99%",
 	},
 	body: {
 		paddingTop: "64px",

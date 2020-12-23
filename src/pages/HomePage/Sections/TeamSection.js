@@ -49,7 +49,7 @@ export default function TeamSection() {
 								/>
 							</GridItem>
 							<h4 className={classes.cardTitle}>
-								Gigi Hadid
+								Phạm Trung Hiếu
 								<br />
 								<small className={classes.smallTitle}>
 									Model
@@ -117,7 +117,7 @@ export default function TeamSection() {
 								/>
 							</GridItem>
 							<h4 className={classes.cardTitle}>
-								Gigi Hadid
+								Nguyễn Thị Thu Uyên
 								<br />
 								<small className={classes.smallTitle}>
 									Model
@@ -185,7 +185,7 @@ export default function TeamSection() {
 								/>
 							</GridItem>
 							<h4 className={classes.cardTitle}>
-								Christian Louboutin
+								Nguyễn Viết Long
 								<br />
 								<small className={classes.smallTitle}>
 									Designer
@@ -241,7 +241,7 @@ export default function TeamSection() {
 								/>
 							</GridItem>
 							<h4 className={classes.cardTitle}>
-								Kendall Jenner
+								Nguyễn Văn Dũng
 								<br />
 								<small className={classes.smallTitle}>
 									Model

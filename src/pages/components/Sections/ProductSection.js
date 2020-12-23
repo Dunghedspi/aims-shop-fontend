@@ -32,7 +32,7 @@ const useStyles = makeStyles(() => ({
 function ProductSection() {
 	const classes = useStyles();
 	return (
-		<Link className={classes.productDetail} to={"/"}>
+		<Link className={classes.productDetail} to={"/product/token"}>
 			<div className={classes.root}>
 				<div className={classes.imgBox}>
 					<img

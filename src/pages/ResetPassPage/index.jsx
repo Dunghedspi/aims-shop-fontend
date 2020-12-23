@@ -4,6 +4,7 @@ import React from "react";
 import { useForm } from "react-hook-form";
 import FormInput from "../../components/ControlCustom/input";
 import { useStyles } from "./styles";
+import { UserApi } from "apis/UserApi";
 import * as yup from "yup";
 
 const schema = yup.object().shape({
@@ -15,7 +16,12 @@ function ResetPassPage() {
 		validationSchema: schema,
 		mode: "onBlur",
 	});
-	const onSubmit = (data, e) => console.log(data, e);
+	const onSubmit = async (data) => {
+		const response = await UserApi.resetPassword(data);
+		if (response) {
+			console.log(response);
+		}
+	};
 	const onError = (error, e) => console.log(error, e);
 	const classes = useStyles();
 	return (

@@ -5,7 +5,7 @@ import React from "react";
 import classNames from "classnames";
 import styles from "assets/jss/pages/HomePage.js";
 import slides from "assets/img/bg7.jpg";
-import TrendingSection from "./TrendingSection";
+import ProductSection from "./ProductSection";
 import TeamSection from "./TeamSection";
 function HomeSection() {
 	const classes = styles();
@@ -31,7 +31,10 @@ function HomeSection() {
 			</Parallax>
 			<div className={classNames(classes.main, classes.mainRaised)}>
 				<div className={classes.container}>
-					<TrendingSection />
+					<ProductSection title={"Trending"} id={"trending"} />
+					<ProductSection title={"Sale"} id={"sale"} />
+					<ProductSection title={"Products Physical"} id={"py"} />
+					<ProductSection title={"Products Digital"} id={"pd"} />
 					<TeamSection />
 				</div>
 			</div>

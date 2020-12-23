@@ -1,76 +1,70 @@
+/* eslint-disable no-unused-vars */
 /* eslint-disable no-undef */
-import { Fade } from "@material-ui/core";
-import Backdrop from "@material-ui/core/Backdrop";
-import Modal from "@material-ui/core/Modal";
-import styles from "assets/jss/pages/HomePage.js";
-// @material-ui/icons
-import Footer from "components/Footer/Footer.js";
-import React, { useState } from "react";
-import SectionNavbars from "../components/Sections/AppBarSection";
-import SignInPage from "../SignInPage";
-import { Switch, Route } from "react-router-dom";
-import { HomeRouter } from "routes";
-const renderRoute = (routes) => {
-	return routes.map((item, index) => (
-		<Route
-			key={index}
-			path={item.path}
-			name={item.name}
-			exact={item.exact}
-			component={item.component}
-		/>
-	));
-};
+// @material-ui/core components
+import { makeStyles } from "@material-ui/core/styles";
+import useStyles from "assets/jss/pages/HomePage.js";
+// nodejs library that concatenates classes
+import classNames from "classnames";
+import GridContainer from "components/Grid/GridContainer.js";
+import GridItem from "components/Grid/GridItem.js";
+import Page from "components/Page";
+import Parallax from "components/Parallax/Parallax.js";
+import React from "react";
+import { UserApi } from "apis/UserApi";
+// Sections for this page
 
-export default function HomePage() {
-	const [isLogin, setIsLogin] = useState(true);
-	const [open, setOpen] = React.useState(false);
-	// const handleOpen = () => {
-	// 	setOpen(true);
-	// };
-	const handleClose = () => {
-		setOpen(false);
-	};
-	const classes = styles();
+import bg from "assets/img/bg7.jpg";
+import TrendingSection from "./Sections/ProductSection.js";
+import TeamSection from "./Sections/TeamSection.js";
+import { getCookie } from "helpers/cookies";
+export default function LandingPage() {
+	React.useEffect(() => {
+		console.log(window.screen.width);
+		if (window.screen.width < 600) {
+			document
+				.getElementById("productHome")
+				.classList.remove(classes.mainRaised);
+		} else {
+			document
+				.getElementById("productHome")
+				.classList.add(classes.mainRaised);
+		}
+	});
+	const classes = useStyles();
 	return (
-		<div>
-			<Modal
-				aria-labelledby="transition-modal-title"
-				aria-describedby="transition-modal-description"
-				className={classes.modal}
-				open={open}
-				onClose={handleClose}
-				closeAfterTransition
-				BackdropComponent={Backdrop}
-				BackdropProps={{
-					timeout: 500,
-				}}
+		<Page title="Home Page" className={classes.root}>
+			<Parallax filter image={bg}>
+				<div className={classes.container}>
+					<GridContainer>
+						<GridItem xs={12} sm={12} md={6}>
+							<h1 className={classes.title}>
+								Your Story Starts With Us.
+							</h1>
+							<h4>
+								Every landing page needs a small description
+								after the big bold title, that{"'"}s why we
+								added this text here. Add here all the
+								information that can make you or your product
+								create the first impression.
+							</h4>
+						</GridItem>
+					</GridContainer>
+				</div>
+			</Parallax>
+			<div
+				className={classNames(classes.main, classes.mainRaised)}
+				id={"productHome"}
 			>
-				<Fade in={open}>
-					<div className={classes.paper}>
-						<SignInPage />
-					</div>
-				</Fade>
-			</Modal>
-			<div className={classes.headerBox}>
-				<SectionNavbars
-					color="white"
-					fixed
-					changeColorOnScroll={{
-						height: 400,
-						color: "white",
-					}}
-					login={{
-						isLogin,
-						setIsLogin,
-					}}
-				/>
+				<div className={classes.container}>
+					<GridContainer>
+						<GridItem xs={12}>
+							<h4>Trending</h4>
+						</GridItem>
+						<GridItem xs={12}></GridItem>
+					</GridContainer>
+					<TeamSection />
+				</div>
 			</div>
-			<div className={classes.body}>
-				<Switch>{renderRoute(HomeRouter)}</Switch>
-			</div>
-
-			<Footer />
-		</div>
+		</Page>
 	);
 }

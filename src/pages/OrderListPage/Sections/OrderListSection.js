@@ -1,5 +1,5 @@
-import React from "react";
 import {
+	Input,
 	makeStyles,
 	Table,
 	TableBody,
@@ -9,35 +9,85 @@ import {
 	TableRow,
 } from "@material-ui/core";
 import Paper from "@material-ui/core/Paper";
+import "date-fns";
+import React from "react";
 import OrderItemSection from "./OrderItemSection";
-const useStyles = makeStyles(() => ({}));
+const useStyles = makeStyles(() => ({
+	root: {
+		padding: "20px",
+	},
+	titleBox: {
+		display: "flex",
+		flexFlow: "row nowrap",
+		justifyContent: "space-between",
+		alignItems: "center",
+		width: "100%",
+	},
+	inputDateFrom: {
+		marginRight: "10px",
+	},
+	inputDateTo: {
+		marginLeft: "10px",
+	},
+	date: {
+		display: "flex",
+		flexFlow: "row nowrap",
+		alignItems: "baseline",
+	},
+}));
 
 const orders = [
 	{
 		id: 1111111,
 		date: "29/12/16",
-		products: "shoes",
+		address: "Thanh Nhàn, Hai Bà Trưng, Hà Nội, Việt Nam",
+		products:
+			"Balo Nam Phát Sáng Có Sạc USB, Khóa Chống Chộm, Chống Nước Balo Đi Học Hot Trend 2019 - Đen - BALO 01",
 		status: "Da giao",
 		total: 123,
 	},
 	{
-		id: 2322222,
+		id: 1111111,
 		date: "29/12/16",
-		products: "shoes",
+		address: "Thanh Nhàn, Hai Bà Trưng, Hà Nội, Việt Nam",
+		products:
+			"Balo Nam Phát Sáng Có Sạc USB, Khóa Chống Chộm, Chống Nước Balo Đi Học Hot Trend 2019 - Đen - BALO 01",
 		status: "Da giao",
 		total: 123,
 	},
 	{
-		id: 3555555,
+		id: 1111111,
 		date: "29/12/16",
-		products: "shoes",
+		address: "Thanh Nhàn, Hai Bà Trưng, Hà Nội, Việt Nam",
+		products:
+			"Balo Nam Phát Sáng Có Sạc USB, Khóa Chống Chộm, Chống Nước Balo Đi Học Hot Trend 2019 - Đen - BALO 01",
 		status: "Da giao",
 		total: 123,
 	},
 	{
-		id: 4445684,
+		id: 1111111,
 		date: "29/12/16",
-		products: "shoes",
+		address: "Thanh Nhàn, Hai Bà Trưng, Hà Nội, Việt Nam",
+		products:
+			"Balo Nam Phát Sáng Có Sạc USB, Khóa Chống Chộm, Chống Nước Balo Đi Học Hot Trend 2019 - Đen - BALO 01",
+		status: "Da giao",
+		total: 123,
+	},
+	{
+		id: 1111111,
+		date: "29/12/16",
+		address: "Thanh Nhàn, Hai Bà Trưng, Hà Nội, Việt Nam",
+		products:
+			"Balo Nam Phát Sáng Có Sạc USB, Khóa Chống Chộm, Chống Nước Balo Đi Học Hot Trend 2019 - Đen - BALO 01",
+		status: "Da giao",
+		total: 123,
+	},
+	{
+		id: 1111111,
+		date: "29/12/16",
+		address: "Thanh Nhàn, Hai Bà Trưng, Hà Nội, Việt Nam",
+		products:
+			"Balo Nam Phát Sáng Có Sạc USB, Khóa Chống Chộm, Chống Nước Balo Đi Học Hot Trend 2019 - Đen - BALO 01",
 		status: "Da giao",
 		total: 123,
 	},
@@ -49,29 +99,61 @@ const renderOrderItem = (orders) => {
 	});
 };
 function OrderListSections() {
+	const [dateFrom, setDateFrom] = React.useState();
+	const [dateTo, setDateTo] = React.useState();
+	const handleDateFrom = (date) => {
+		setDateFrom(date);
+	};
+	const handleDateTo = (date) => {
+		setDateTo(date);
+	};
 	const classes = useStyles();
 	return (
 		<div className={classes.root}>
 			<div className={classes.titleBox}>
-				<h4>Orders</h4>
+				<div>
+					<h2>Orders</h2>
+				</div>
+				<div className={classes.date}>
+					<Input
+						type="date"
+						value={dateFrom}
+						onChange={() => handleDateFrom}
+						className={classes.inputDateFrom}
+					/>
+					{"_ "}
+					<Input
+						type="date"
+						value={dateTo}
+						onChange={() => handleDateTo}
+						className={classes.inputDateTo}
+					/>
+				</div>
 			</div>
 			<div className={classes.body}>
 				<TableContainer component={Paper}>
-					<Table className={classes.table} aria-label="simple table">
+					<Table aria-label="simple table">
 						<TableHead>
 							<TableRow>
-								<TableCell align="left" size="small">
-									{"Code Order"}
+								<TableCell align="left" width="5%">
+									{"Code"}
 								</TableCell>
-								<TableCell align="left">
-									{"Date of Purchase"}
+								<TableCell align="left" width="10%">
+									{"Date"}
 								</TableCell>
-								<TableCell align="left">{"Products"}</TableCell>
-								<TableCell align="left">{"Total"}</TableCell>
-								<TableCell align="left">{"Status"}</TableCell>
-								<TableCell align="center">
-									{"Details"}
+								<TableCell align="left" width="20%">
+									{"Address"}
 								</TableCell>
+								<TableCell align="left" width="40%">
+									{"Products"}
+								</TableCell>
+								<TableCell align="left" width="10%">
+									{"Total"}
+								</TableCell>
+								<TableCell align="left" width="10%">
+									{"Status"}
+								</TableCell>
+								<TableCell align="right">{""}</TableCell>
 							</TableRow>
 						</TableHead>
 						<TableBody>{renderOrderItem(orders)}</TableBody>

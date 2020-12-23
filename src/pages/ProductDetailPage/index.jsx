@@ -1,8 +1,7 @@
-import React, { useState } from "react";
 import { Button, Divider, makeStyles } from "@material-ui/core";
 import productsImage from "assets/img/faces/product.jpg";
-import ProductSection from "./Sections/ProductSection";
-
+import React from "react";
+import ProductSliderSection from "pages/components/Sections/ProductSliderSection";
 const useStyles = makeStyles(() => ({
 	root: {
 		display: "flex",
@@ -161,47 +160,6 @@ const useStyles = makeStyles(() => ({
 
 function ProductDetailPage() {
 	const classes = useStyles();
-	const [offsetX, setOffsetX] = useState(0);
-	const renderProducts = () => {
-		let list = [];
-		for (let i = 0; i < 10; i++) {
-			list.push(
-				<li
-					aria-hidden="false"
-					data-in-view="true"
-					data-index={i}
-					className={classes.silde}
-					key={i}
-				>
-					<ProductSection />
-				</li>
-			);
-		}
-		return list;
-	};
-	const handelClickPrevBtn = () => {
-		if (offsetX < 0) {
-			let widthElement =
-				document.getElementById("slider").childNodes[0].clientWidth +
-				20;
-			let x = offsetX + widthElement;
-			document.getElementById(
-				"slider"
-			).style.transform = `translate3d(${x}px, 0px, 0px)`;
-			setOffsetX(x);
-		}
-	};
-	const handelClickNextBtn = () => {
-		let widthElement =
-			document.getElementById("slider").childNodes[0].clientWidth + 20;
-		if (offsetX > -(widthElement * 7)) {
-			let x = offsetX - widthElement;
-			document.getElementById(
-				"slider"
-			).style.transform = `translate3d(${x}px, 0px, 0px)`;
-			setOffsetX(x);
-		}
-	};
 	return (
 		<div className={classes.root}>
 			<div className={classes.productDetail}>
@@ -248,63 +206,7 @@ function ProductDetailPage() {
 				<div className={classes.relatedTitle}>
 					<h4>YOU MIGHT ALSO LIKE</h4>
 				</div>
-				<div
-					className={classes.box}
-					role="complementary"
-					data-test="recommendations-carousel"
-				>
-					<div
-						data-orientation="vertical"
-						data-hero="false"
-						data-slides-to-show="3"
-						data-scrollable="true"
-						data-should-transition="false"
-						data-semantically-hide-unobserved-cards="true"
-						data-conditionally-hide-nav-buttons="false"
-						data-with-tracker="false"
-						data-with-navigation="false"
-					>
-						<ul className={classes.slider} id={"slider"}>
-							{renderProducts()}
-						</ul>
-						<button
-							data-automation="carousel-nav-prev"
-							aria-label="Previous"
-							className={classes.prevBtn}
-							onClick={() => handelClickPrevBtn()}
-						>
-							<div className={classes.icon}>
-								<svg
-									aria-hidden="true"
-									fill="#111"
-									height="30px"
-									width="30px"
-									viewBox="0 0 185.4 300"
-								>
-									<path d="M160.4 300c-6.4 0-12.7-2.5-17.7-7.3L0 150 142.7 7.3c9.8-9.8 25.6-9.8 35.4 0 9.8 9.8 9.8 25.6 0 35.4L70.7 150 178 257.3c9.8 9.8 9.8 25.6 0 35.4-4.9 4.8-11.3 7.3-17.6 7.3z"></path>
-								</svg>
-							</div>
-						</button>
-						<button
-							data-automation="carousel-nav-next"
-							aria-label="Next"
-							className={classes.nextBtn}
-							onClick={() => handelClickNextBtn()}
-						>
-							<div className={classes.icon}>
-								<svg
-									aria-hidden="true"
-									fill="#111"
-									height="30px"
-									width="30px"
-									viewBox="0 0 185.4 300"
-								>
-									<path d="M7.3 292.7c-9.8-9.8-9.8-25.6 0-35.4L114.6 150 7.3 42.7c-9.8-9.8-9.8-25.6 0-35.4s25.6-9.8 35.4 0L185.4 150 42.7 292.7c-4.9 4.8-11.3 7.3-17.7 7.3-6.4 0-12.7-2.5-17.7-7.3z"></path>
-								</svg>
-							</div>
-						</button>
-					</div>
-				</div>
+				<ProductSliderSection id={"productRated"} />
 			</div>
 		</div>
 	);

@@ -100,7 +100,6 @@ function ProductPage() {
 	const myFunction = () => {
 		if (window.pageYOffset > currentYOffset) {
 			if (window.pageYOffset >= headerYOffset) {
-				console.log(currentYOffset);
 				document
 					.getElementById("headerSection")
 					.classList.remove(classes.sticky1);
@@ -108,14 +107,12 @@ function ProductPage() {
 					.getElementById("headerSection")
 					.classList.add(classes.sticky);
 			} else {
-				console.log(2);
 				document
 					.getElementById("headerSection")
 					.classList.remove(classes.sticky1);
 			}
 		} else {
 			if (window.pageYOffset > headerYOffset) {
-				console.log(3);
 				document
 					.getElementById("headerSection")
 					.classList.remove(classes.sticky);
@@ -123,7 +120,6 @@ function ProductPage() {
 					.getElementById("headerSection")
 					.classList.add(classes.sticky1);
 			} else {
-				console.log(4);
 				document
 					.getElementById("headerSection")
 					.classList.remove(classes.sticky);
