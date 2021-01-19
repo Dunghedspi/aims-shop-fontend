@@ -1,11 +1,14 @@
+/* eslint-disable react/prop-types */
 import { Button, makeStyles } from "@material-ui/core";
-import shoes from "assets/img/faces/shoes.jpeg";
 import LinkControl from "components/ControlCustom/Link";
 import RemoveIcon from "@material-ui/icons/Remove";
 import AddIcon from "@material-ui/icons/Add";
 import DeleteOutlineIcon from "@material-ui/icons/DeleteOutline";
 import React from "react";
-
+import fomatPrice from "helpers/convertPrice";
+import { CartApi } from "apis/CartApi";
+import { addNumberProduct } from "actions/CartAction";
+import { useDispatch } from "react-redux";
 const useStyles = makeStyles((theme) => ({
 	root: {
 		display: "flex",
@@ -21,6 +24,7 @@ const useStyles = makeStyles((theme) => ({
 		flexFlow: "column nowrap",
 		padding: "0 0 0 3%",
 		flex: "75%",
+		justifyContent: "space-between",
 	},
 	topBox: {
 		display: "flex",
@@ -79,8 +83,47 @@ const useStyles = makeStyles((theme) => ({
 		},
 	},
 }));
-function Product() {
+
+function Product(props) {
+	const { product, handleDeleteProducts, handleChange } = props;
+	const { quantity, productModel } = product;
+	const dispatch = useDispatch();
 	const classes = useStyles();
+	const handleClick = async () => {
+		const response = await CartApi.DeleteProductToCart({
+			productId: productModel.id,
+			cartId: product.cartId,
+		});
+		if (response) {
+			handleDeleteProducts(product);
+		}
+	};
+	const handleClickAdd = async (product) => {
+		const formData = { quantity: 1, productId: product.productModel.id };
+		const response = await CartApi.AddProductToCart(formData);
+		if (response) {
+			dispatch(addNumberProduct(1));
+			handleChange({ ...product, quantity: product.quantity + 1 }, 1);
+		}
+	};
+	const handleClickDelete = async (product) => {
+		if (product.quantity === 1) {
+			handleClick();
+		} else {
+			const formData = {
+				quantity: -1,
+				productId: product.productModel.id,
+			};
+			const response = await CartApi.AddProductToCart(formData);
+			if (response) {
+				dispatch(addNumberProduct(-1));
+				handleChange(
+					{ ...product, quantity: product.quantity - 1 },
+					-1
+				);
+			}
+		}
+	};
 	return (
 		<div className={classes.root}>
 			<div className={classes.leftBox}>
@@ -88,7 +131,7 @@ function Product() {
 					path=""
 					label={
 						<img
-							src={shoes}
+							src={productModel.imageUrl}
 							alt={"products"}
 							className={classes.imageProduct}
 						/>
@@ -100,26 +143,29 @@ function Product() {
 					<div className={classes.description}>
 						<LinkControl
 							path=""
-							label={<h4 className={classes.link}>Shoes</h4>}
+							label={
+								<h4 className={classes.link}>
+									{productModel.name}
+								</h4>
+							}
 						/>
-						<p>Shirt - blue</p>
-						<p>Color: blue</p>
-						<p>Size: M</p>
 					</div>
 					<div className={classes.quantity}>
 						<Button
 							size="small"
 							color="primary"
 							className={classes.margin}
+							onClick={() => handleClickDelete(product)}
 						>
 							<RemoveIcon />
 						</Button>
-						<span className={classes.qty}>2</span>
+						<span className={classes.qty}>{quantity}</span>
 						<Button
 							size="small"
 							color="primary"
 							fullWidth={false}
 							className={classes.margin}
+							onClick={() => handleClickAdd(product)}
 						>
 							<AddIcon />
 						</Button>
@@ -130,12 +176,15 @@ function Product() {
 						<Button
 							className={classes.button}
 							startIcon={<DeleteOutlineIcon />}
+							onClick={() => handleClick()}
 						>
 							Remove Product
 						</Button>
 					</div>
 					<div className={classes.priceBox}>
-						<span>¥17</span>
+						<span style={{ fontWeight: 200 }}>
+							{fomatPrice(productModel.price) + " VND"}
+						</span>
 					</div>
 				</div>
 			</div>

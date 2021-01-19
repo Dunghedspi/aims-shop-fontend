@@ -1,8 +1,9 @@
 /* eslint-disable react/prop-types */
 import React from "react";
 import { Button, makeStyles } from "@material-ui/core";
-import shoes from "assets/img/faces/shoes.jpeg";
 import { Link } from "react-router-dom";
+import fomatPrice from "helpers/convertPrice";
+
 const useStyles = makeStyles(() => ({
 	container: {
 		marginTop: "20px",
@@ -67,18 +68,19 @@ function CartSection(props) {
 	const classes = useStyles();
 	const renderCart = (carts) => {
 		return carts.map((cart, index) => {
+			const { productModel } = cart;
 			return (
 				<div className={classes.item} key={index}>
 					<div className={classes.img}>
 						<img
-							src={shoes}
+							src={productModel.imageUrl}
 							alt={"products"}
 							className={classes.imageProduct}
 						/>
 					</div>
 					<div className={classes.description}>
-						<h4>shoes</h4>
-						<span>¥17,600</span>
+						<span>{productModel.name}</span>
+						<span>{fomatPrice(productModel.price) + " VND"}</span>
 					</div>
 				</div>
 			);

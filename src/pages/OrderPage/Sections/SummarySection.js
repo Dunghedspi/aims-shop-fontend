@@ -1,5 +1,7 @@
+/* eslint-disable react/prop-types */
 import React from "react";
 import { makeStyles } from "@material-ui/core";
+import fomatPrice from "helpers/convertPrice";
 const useStyles = makeStyles(() => ({
 	container: {
 		display: "flex",
@@ -31,7 +33,8 @@ const useStyles = makeStyles(() => ({
 		padding: 0,
 	},
 }));
-function SummarySection() {
+function SummarySection(props) {
+	const { sum, ship } = props;
 	const classes = useStyles();
 	return (
 		<div className={classes.container}>
@@ -41,15 +44,17 @@ function SummarySection() {
 			<div className={classes.body}>
 				<div className={classes.item}>
 					<h4 className={classes.h4}>SUBTOTAL</h4>
-					<span>4,319.00vnd</span>
+					<span>{fomatPrice(sum) + " VND"}</span>
 				</div>
 				<div className={classes.item}>
 					<h4 className={classes.h4}>{"SHIPPING & HANDLING"}</h4>
-					<span>0</span>
+					<span>{fomatPrice(ship) + " VND"}</span>
 				</div>
 				<div className={classes.item}>
 					<h3 className={classes.title}>TOTAL</h3>
-					<span className={classes.total}>4,319.00vnd</span>
+					<span className={classes.total}>
+						{fomatPrice(sum + ship) + " VND"}
+					</span>
 				</div>
 			</div>
 		</div>

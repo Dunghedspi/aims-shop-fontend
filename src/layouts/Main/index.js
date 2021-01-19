@@ -6,6 +6,7 @@ import Header from "./Header/index";
 import { UserApi } from "apis/UserApi";
 import { useDispatch } from "react-redux";
 import { SetInfo } from "actions/UserAction";
+import { getTotalProduct } from "actions/CartAction";
 const useStyles = makeStyles((theme) => ({
 	root: {
 		backgroundColor: theme.palette.background.dark,
@@ -30,9 +31,11 @@ const UserLayout = () => {
 	const classes = useStyles();
 	const dispatch = useDispatch();
 	React.useEffect(() => {
+		dispatch(getTotalProduct());
 		const getUser = async () => {
 			const response = await UserApi.getUserInfo();
 			if (response) {
+				console.log(response);
 				dispatch(SetInfo(response));
 			}
 		};

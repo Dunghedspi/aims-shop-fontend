@@ -39,7 +39,7 @@ const SignUpPage = () => {
 	const email = useSelector((state) => state.UserReducers.email);
 	React.useEffect(() => {
 		if (email) {
-			navigate("/");
+			navigate("/auth/signin");
 		}
 	}, []);
 	const { register, control, handleSubmit, errors } = useForm({
@@ -166,7 +166,7 @@ const SignUpPage = () => {
 					<Grid container>
 						<Grid item md={6}>
 							<LinkControl
-								path={"/signin"}
+								path={"/auth/signin"}
 								label={"Do have an account? Sign In"}
 							/>
 						</Grid>

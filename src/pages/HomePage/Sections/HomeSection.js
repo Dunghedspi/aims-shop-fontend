@@ -5,7 +5,7 @@ import React from "react";
 import classNames from "classnames";
 import styles from "assets/jss/pages/HomePage.js";
 import slides from "assets/img/bg7.jpg";
-import ProductSection from "./ProductSection";
+import ProductSection from "../ProductSection";
 import TeamSection from "./TeamSection";
 function HomeSection() {
 	const classes = styles();

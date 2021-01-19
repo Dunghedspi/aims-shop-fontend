@@ -1,3 +1,4 @@
+/* eslint-disable indent */
 /* eslint-disable no-unused-vars */
 import React, { useState } from "react";
 import { makeStyles } from "@material-ui/core";
@@ -5,6 +6,8 @@ import BodyHeaderSection from "./Sections/BodyHeaderSection";
 import FilterSection from "./Sections/FilterSection";
 import ProductSection from "./Sections/ProductSection";
 import classNames from "classnames";
+import { useLocation } from "react-router";
+import { ProductApi } from "apis/ProductApi";
 const useStyles = makeStyles(() => ({
 	container: {
 		display: "flex",
@@ -71,19 +74,22 @@ const useStyles = makeStyles(() => ({
 		transition: "transform .3s ease",
 	},
 }));
-const renderProducts = () => {
-	let list = [];
-	for (let i = 0; i < 10; i++) {
-		list.push(<ProductSection key={i} />);
-	}
-	return list;
+const renderProducts = (products) => {
+	return products.map((product, index) => {
+		return <ProductSection key={index} product={product} />;
+	});
 };
+
+function useQuery() {
+	return new URLSearchParams(useLocation().search);
+}
 
 function ProductPage() {
 	const classes = useStyles();
 	const [showFilter, setShowFilter] = useState(true);
 	const [headerYOffset, setHeaderYOffset] = useState(0);
 	const [currentYOffset, setCurrentYOffset] = useState(0);
+	const params = useQuery();
 	const animationFilter = (showFilter) => {
 		if (showFilter) {
 			document
@@ -130,6 +136,7 @@ function ProductPage() {
 		}
 		setCurrentYOffset(window.pageYOffset);
 	};
+	const [products, setProducts] = React.useState([]);
 	React.useEffect(() => {
 		setHeaderYOffset(document.getElementById("headerSection").offsetTop);
 		window.addEventListener("scroll", myFunction);
@@ -137,12 +144,35 @@ function ProductPage() {
 			window.removeEventListener("scroll", myFunction);
 		};
 	});
+	React.useEffect(() => {
+		const getProducts = async () => {
+			const data = await ProductApi.GetProductsRelate(params.get("name"));
+			if (data) {
+				setProducts(data);
+			}
+		};
+		getProducts();
+	}, [params.get("name")]);
+	const [sort, setSort] = React.useState(1);
+	const sortProduct = (products) => {
+		console.log(sort);
+		let newProducts = [];
+		switch (sort) {
+			case 1: {
+				newProducts = products.sort(
+					(a, b) => new Date(b.inputDate) - new Date(a.inputDate)
+				);
+			}
+		}
+		return newProducts;
+	};
 	return (
 		<div className={classes.container}>
 			<div className={classes.BodyHeaderSection} id={"headerSection"}>
 				<BodyHeaderSection
 					showFilter={showFilter}
 					setShowFilter={animationFilter}
+					handleClick={setSort}
 				/>
 			</div>
 			<div className={classes.BodyProduct}>
@@ -156,7 +186,7 @@ function ProductPage() {
 					<FilterSection />
 				</div>
 				<div className={classNames(classes.products)}>
-					{renderProducts()}
+					{renderProducts(sortProduct(products))}
 				</div>
 			</div>
 		</div>

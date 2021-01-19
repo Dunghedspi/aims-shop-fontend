@@ -1,26 +1,37 @@
 import { Button, Divider, makeStyles } from "@material-ui/core";
-import productsImage from "assets/img/faces/product.jpg";
 import React from "react";
 import ProductSliderSection from "pages/components/Sections/ProductSliderSection";
+import { useLocation } from "react-router";
+import { ProductApi } from "apis/ProductApi";
+import fomatPrice from "helpers/convertPrice";
+import RemoveIcon from "@material-ui/icons/Remove";
+import AddIcon from "@material-ui/icons/Add";
+import { useDispatch } from "react-redux";
+import { addProduct } from "actions/CartAction";
 const useStyles = makeStyles(() => ({
 	root: {
 		display: "flex",
 		flexFlow: "column nowrap",
 		padding: "3% 3%",
 	},
+	quantity: {
+		border: "#ced4da 1px solid",
+		borderRadius: "5px",
+		maxHeight: "33px",
+	},
 	productDetail: {
 		display: "flex",
 		flexFlow: "row wrap",
 	},
 	imgBox: {
-		flex: "70%",
+		flex: "50%",
 	},
 	img: {
 		width: "100%",
 		height: "auto",
 	},
 	description: {
-		flex: "30%",
+		flex: "40%",
 		display: "flex",
 		flexFlow: "column nowrap",
 		padding: "0 0 0 2%",
@@ -33,11 +44,12 @@ const useStyles = makeStyles(() => ({
 	buttonGroup: {
 		display: "flex",
 		flexFlow: "row nowrap",
-		justifyContent: "center",
 		marginTop: "3%",
+		justifyContent: "space-around",
+		alignItems: "baseline",
 	},
 	addCart: {
-		width: "75%",
+		width: "50%",
 		padding: "4% 7%",
 		borderRadius: "30px",
 		backgroundColor: "black",
@@ -157,8 +169,40 @@ const useStyles = makeStyles(() => ({
 		},
 	},
 }));
+function useQuery() {
+	return new URLSearchParams(useLocation().search);
+}
 
 function ProductDetailPage() {
+	const params = useQuery();
+	const [product, setProduct] = React.useState({});
+	const [related, setRelated] = React.useState([]);
+	const dispatch = useDispatch();
+	React.useEffect(() => {
+		const getProduct = async () => {
+			const response = await ProductApi.GetProductDetails(
+				params.get("id")
+			);
+			if (response) {
+				console.log(response);
+				setProduct(response);
+			}
+			const data = await ProductApi.GetProductsRelate(
+				response.codeCategory
+			);
+			if (data) {
+				setRelated(data.splice(0, 10));
+			}
+		};
+		getProduct();
+	}, [params.get("id")]);
+	const handleClick = () => {
+		dispatch(
+			addProduct({ productId: params.get("id"), quantity: quantity })
+		);
+		setQuantity(1);
+	};
+	const [quantity, setQuantity] = React.useState(1);
 	const classes = useStyles();
 	return (
 		<div className={classes.root}>
@@ -166,36 +210,57 @@ function ProductDetailPage() {
 				<div className={classes.imgBox}>
 					<img
 						alt={"productDetail"}
-						src={productsImage}
+						src={product.imageUrl}
 						className={classes.img}
 					/>
 				</div>
 				<div className={classes.description}>
 					<div className={classes.titleBox}>
 						<div className={classes.title}>
-							<h4>Products Physical (DVD)</h4>
-							<h1>Nike Air Zoom</h1>
+							<h4></h4>
+							<h1>{product.name}</h1>
 						</div>
 						<div className={classes.price}>
-							<h4>¥33,000</h4>
+							<h4>{fomatPrice(product.price) + " VND"}</h4>
 						</div>
 					</div>
 					<Divider />
 					<div className={classes.context}>
-						<h4>
-							Gear up for your next personal best with the Nike
-							Air Zoom Alphafly NEXT%. Responsive foam and 2 Zoom
-							Air units combine to push your running game forward
-							for your next marathon or road race.
-						</h4>
+						<h4>{product.description}</h4>
 					</div>
 					<Divider />
 					<div className={classes.buttonGroup}>
+						<div className={classes.quantity}>
+							<Button
+								size="small"
+								color="primary"
+								className={classes.margin}
+								onClick={() =>
+									setQuantity((quantity) => {
+										if (quantity >= 2) return quantity - 1;
+										return 1;
+									})
+								}
+							>
+								<RemoveIcon />
+							</Button>
+							<span className={classes.qty}>{quantity}</span>
+							<Button
+								size="small"
+								color="primary"
+								fullWidth={false}
+								className={classes.margin}
+								onClick={() => setQuantity(quantity + 1)}
+							>
+								<AddIcon />
+							</Button>
+						</div>
 						<Button
 							variant="contained"
 							color="primary"
 							disableElevation
 							className={classes.addCart}
+							onClick={handleClick}
 						>
 							Add To Cart
 						</Button>
@@ -206,7 +271,7 @@ function ProductDetailPage() {
 				<div className={classes.relatedTitle}>
 					<h4>YOU MIGHT ALSO LIKE</h4>
 				</div>
-				<ProductSliderSection id={"productRated"} />
+				<ProductSliderSection products={related} id={"productRated"} />
 			</div>
 		</div>
 	);

@@ -1,8 +1,8 @@
+/* eslint-disable react/prop-types */
 import { makeStyles } from "@material-ui/core";
-import productsImage from "assets/img/faces/product.jpg";
 import React from "react";
 import { Link } from "react-router-dom";
-// import classNames from "classnames";
+import fomatPrice from "helpers/convertPrice";
 const useStyles = makeStyles(() => ({
 	root: {
 		display: "flex",
@@ -17,35 +17,35 @@ const useStyles = makeStyles(() => ({
 		color: "black",
 		textDecoration: "none",
 		margin: "0 2% 4% 0",
-		display: "inline",
-		float: "left",
+		maxWidth: "31%",
 	},
 	"@media(max-width:800px)": {
-		description: {
-			fontSize: "12px",
-		},
-		price: {
-			fontSize: "12px",
+		productDetail: {
+			maxWidth: "45%",
 		},
 	},
 }));
-function ProductSection() {
+function ProductSection(props) {
+	const { product } = props;
 	const classes = useStyles();
 	return (
-		<Link className={classes.productDetail} to={"/product/token"}>
+		<Link
+			className={classes.productDetail}
+			to={`/product/details?id=${product.id}`}
+		>
 			<div className={classes.root}>
 				<div className={classes.imgBox}>
 					<img
 						alt={"products"}
-						src={productsImage}
+						src={product.imageUrl}
 						className={classes.image}
 					/>
 				</div>
 				<div className={classes.description}>
-					<h4>Shoes Nike</h4>
+					<h4>{product.name}</h4>
 				</div>
 				<div className={classes.price}>
-					<span>¥17,600</span>
+					<span>{fomatPrice(product.price) + " VND"}</span>
 				</div>
 			</div>
 		</Link>

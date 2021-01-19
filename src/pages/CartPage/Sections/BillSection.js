@@ -1,5 +1,7 @@
-import { Button, makeStyles } from "@material-ui/core";
+/* eslint-disable react/prop-types */
+import { Button, Divider, makeStyles } from "@material-ui/core";
 import React from "react";
+import fomatPrice from "helpers/convertPrice";
 
 const useStyles = makeStyles(() => ({
 	root: {
@@ -50,7 +52,8 @@ const useStyles = makeStyles(() => ({
 		},
 	},
 }));
-function BillSection() {
+function BillSection(props) {
+	const { totalPrice, handleClickPayment } = props;
 	const classes = useStyles();
 	return (
 		<div className={classes.root}>
@@ -59,18 +62,20 @@ function BillSection() {
 			</div>
 			<div className={classes.Subtotal}>
 				<h4>Subtotal</h4>
-				<span>¥17,600</span>
+				<span>{fomatPrice(totalPrice) + " VND"}</span>
 			</div>
-			<div className={classes.summer}>
-				<h4>Estimated Shipping {"&"} Handling</h4>
-				<span>¥0</span>
-			</div>
+			<Divider />
 			<div className={classes.total}>
 				<h4>Total</h4>
-				<span>¥17,600</span>
+				<span>{fomatPrice(totalPrice) + " VND"}</span>
 			</div>
 			<div className={classes.button}>
-				<Button variant="contained" color="primary" disableElevation>
+				<Button
+					variant="contained"
+					color="primary"
+					disableElevation
+					onClick={handleClickPayment}
+				>
 					Checkout
 				</Button>
 			</div>
