@@ -28,8 +28,14 @@ const useStyles = makeStyles(() => ({
 		},
 	},
 }));
+const arraySort = [
+	"Newest",
+	"Sale",
+	"Price: Low - Hight",
+	"Price: Hight - Low",
+];
 function BodyHeaderSection(props) {
-	const { showFilter, setShowFilter } = props;
+	const { showFilter, setShowFilter, handleClick } = props;
 	const classes = useStyles();
 	return (
 		<div className={classes.root}>
@@ -52,12 +58,12 @@ function BodyHeaderSection(props) {
 							className: classes.navLink,
 							color: "transparent",
 						}}
-						dropdownList={[
-							"Newest",
-							"Sale",
-							"Price: Low - Hight",
-							"Price: Hight - Low",
-						]}
+						dropdownList={arraySort}
+						onClick={(event) =>
+							handleClick(
+								arraySort.findIndex((item) => item === event)
+							)
+						}
 					/>
 				</div>
 			</div>

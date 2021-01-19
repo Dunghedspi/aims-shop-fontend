@@ -1,5 +1,5 @@
 import axiosCustom from "../Plugins/axios";
-export const UserApi = {
+export const ProductApi = {
 	GetProductsTrending: async () => {
 		let trendingProducts = null;
 		const response = await axiosCustom
@@ -23,7 +23,7 @@ export const UserApi = {
 	GetProductsRelate: async (payload) => {
 		let relateProducts = null;
 		const response = await axiosCustom
-			.callApi("GET", "/api/products/relate", null, payload)
+			.callApi("GET", "/api/product/getProductByCategory/" + payload)
 			.catch((error) => console.error(error));
 		if (response && response.status === 200) {
 			relateProducts = response.data;
@@ -69,5 +69,25 @@ export const UserApi = {
 			products = response.data;
 		}
 		return products;
+	},
+	GetProductRandom: async () => {
+		let products = null;
+		const response = await axiosCustom
+			.callApi("GET", "/api/product/getProductRandom")
+			.catch((error) => console.error(error));
+		if (response && response.status === 200) {
+			products = response.data;
+		}
+		return products;
+	},
+	GetProductDetails: async (payload) => {
+		let product = {};
+		const response = await axiosCustom
+			.callApi("GET", "/api/product/getProductById/" + payload)
+			.catch((error) => console.error(error));
+		if (response && response.status === 200) {
+			product = response.data;
+		}
+		return product;
 	},
 };

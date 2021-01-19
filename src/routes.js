@@ -9,6 +9,7 @@ import SignUpPage from "pages/SignUpPage";
 import ResetPassPage from "pages/ResetPassPage";
 import ProductPage from "pages/ProductPage";
 import ProductDetails from "pages/ProductDetailPage";
+import OrderPage from "pages/OrderPage";
 import CartPage from "pages/CartPage";
 import NotFoundView from "pages/errors/NotFoundView";
 const routes = [
@@ -17,10 +18,11 @@ const routes = [
 		element: <MainLayout />,
 		children: [
 			{ path: "/", element: <HomePage /> },
-			{ path: "/products", element: <ProductPage /> },
-			{ path: "/product/token", element: <ProductDetails /> },
-			{ path: "404", element: <NotFoundView /> },
+			{ path: "/products/category/*", element: <ProductPage /> },
+			{ path: "/product/details/*", element: <ProductDetails /> },
 			{ path: "/cart", element: <CartPage /> },
+			{ path: "/checkout", element: <OrderPage /> },
+			{ path: "404", element: <NotFoundView /> },
 			{ path: "*", element: <Navigate to="/404" /> },
 		],
 	},

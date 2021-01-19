@@ -4,6 +4,8 @@ import ShippingSection from "./Sections/ShippingSection";
 import PaymenSection from "./Sections/PaymenSection";
 import SummarySection from "./Sections/SummarySection";
 import CartSection from "./Sections/CartSection";
+import { useSelector } from "react-redux";
+import { CartApi } from "apis/CartApi";
 const useStyles = makeStyles(() => ({
 	root: {
 		display: "flex",
@@ -44,10 +46,44 @@ const cards = [
 		name: "Bank D",
 	},
 ];
+const totalPrice = (products) => {
+	return products.reduce(
+		(sum, item) => sum + item.productModel.price * item.quantity,
+		0
+	);
+};
 function OrderPage() {
 	const classes = useStyles();
 	const [cardId, setCardId] = React.useState(-1);
 	const [isPlace, setIsPlace] = React.useState(false);
+	const user = useSelector((state) => state.UserReducers);
+	const [products, setProducts] = React.useState([]);
+	const [sum, setSum] = React.useState(0);
+	const [shippingData, setShippingData] = React.useState("");
+	const [shipping, setShipping] = React.useState(0);
+	React.useEffect(() => {
+		const getCart = async () => {
+			const response = await CartApi.GetCart();
+			if (response) {
+				console.log(response);
+				setProducts(response);
+				setSum(totalPrice(response));
+			}
+		};
+		getCart();
+	}, []);
+	const handleCheckShipping = async (data) => {
+		console.log(data);
+		const formData = {
+			provinceId: data.province,
+			cartId: products[0].cartId,
+		};
+		const response = await CartApi.GetShipping(formData);
+		if (response) {
+			setShipping(response);
+		}
+		setShippingData(data);
+	};
 	return (
 		<div className={classes.root}>
 			<div className={classes.container}>
@@ -55,6 +91,9 @@ function OrderPage() {
 					<ShippingSection
 						isPlace={isPlace}
 						setIsPlace={setIsPlace}
+						user={user}
+						shippingData={shippingData}
+						setShippingData={handleCheckShipping}
 					/>
 					<PaymenSection
 						setCardId={setCardId}
@@ -65,10 +104,10 @@ function OrderPage() {
 				</div>
 				<div className={classes.rightBox}>
 					<div className={classes.summary}>
-						<SummarySection />
+						<SummarySection sum={sum} ship={shipping} />
 					</div>
 					<div className={classes.cartBox}>
-						<CartSection carts={cards} />
+						<CartSection carts={products} />
 					</div>
 				</div>
 			</div>

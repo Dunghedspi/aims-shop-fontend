@@ -1,3 +1,5 @@
+import { toastifySuccess } from "helpers/toastify";
+import { toastifyError } from "helpers/toastify";
 import axiosCustom from "../Plugins/axios";
 export const UserApi = {
 	SignIn: async (payload) => {
@@ -16,8 +18,11 @@ export const UserApi = {
 		const response = await axiosCustom
 			.callApi("POST", "/api/auth/register", payload)
 			.catch((error) => console.error(error));
-		if (response && response.status === 200) {
+		if (response && response.status === 201) {
 			isSignUp = true;
+			toastifySuccess("Tạo tài khoản thành công");
+		} else {
+			toastifyError("Email đã được sử dụng!");
 		}
 		return isSignUp;
 	},
@@ -51,7 +56,7 @@ export const UserApi = {
 	getUserInfo: async () => {
 		let data = null;
 		const response = await axiosCustom
-			.callApi("GET", "/api/user/getUser")
+			.callApi("GET", "/api/user/getUserInfo")
 			.catch((error) => console.log(error));
 		if (response && response.status === 200) {
 			data = response.data;

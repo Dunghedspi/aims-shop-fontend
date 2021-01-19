@@ -1,3 +1,4 @@
+/* eslint-disable indent */
 /* eslint-disable react/prop-types */
 /* eslint-disable quotes */
 /* eslint-disable no-undef */
@@ -12,14 +13,15 @@ import SearchIcon from "@material-ui/icons/Search";
 import LinkCustom from "components/ControlCustom/Link";
 import CustomDropdown from "components/CustomDropdown/CustomDropdown";
 import React, { useState } from "react";
-import profileImage from "assets/img/faces/avatar.jpg";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import classNames from "classnames";
-import { List, ListItem } from "@material-ui/core";
+import { Avatar, List, ListItem } from "@material-ui/core";
 import Button from "components/CustomButtons/Button";
 import CustomShoppingIcon from "./CartIconSection";
 import LinkControl from "components/ControlCustom/Link";
 import logo from "assets/img/logo/icon1.svg";
+import { useSelector } from "react-redux";
+
 const useStyles = makeStyles((theme) => ({
 	root: {
 		flexGrow: 1,
@@ -273,10 +275,28 @@ const listDownNotLogin = [
 		key={2}
 	/>,
 ];
+const listDownAfterLogin = [
+	<LinkControl
+		path="/user"
+		menu={true}
+		label={<div>THông tin tài khoản</div>}
+		key={1}
+	/>,
+	<div
+		onClick={() => {
+			handleClickLogout();
+		}}
+		key={2}
+	>
+		Đăng xuất
+	</div>,
+];
 
 export default function SectionNavbars(props) {
 	const [pYOffsetPrev, setPYOffsetPrev] = useState(0);
+	const user = useSelector((state) => state.UserReducers);
 	const classes = useStyles();
+	const navigate = useNavigate();
 	React.useEffect(() => {
 		if (props.changeColorOnScroll) {
 			window.addEventListener("scroll", headerColorChange);
@@ -287,6 +307,28 @@ export default function SectionNavbars(props) {
 			}
 		};
 	});
+	const handleClick = (category) => {
+		let key = "";
+		switch (category) {
+			case "BOOK": {
+				key = "bookPhy";
+				break;
+			}
+			case "DVD": {
+				key = "dvdPhy";
+				break;
+			}
+			case "CD": {
+				key = "cdPhy";
+				break;
+			}
+			case "LP": {
+				key = "lpPhy";
+				break;
+			}
+		}
+		navigate(`/products/category?name=${key}`);
+	};
 	const headerColorChange = () => {
 		const { changeColorOnScroll } = props;
 		const windowsScrollTop = window.pageYOffset;
@@ -360,6 +402,9 @@ export default function SectionNavbars(props) {
 									color: "transparent",
 								}}
 								dropdownList={["BOOK", "DVD", "CD", "LP"]}
+								onClick={(event) => {
+									handleClick(event);
+								}}
 							/>
 						</ListItem>
 						<ListItem className={classes.listItem}>
@@ -431,11 +476,15 @@ export default function SectionNavbars(props) {
 								left
 								caret={false}
 								hoverColor="black"
-								dropdownHeader="Xin Chao"
+								dropdownHeader={`Hello ${user.fullName}`}
 								buttonText={
-									<img
-										src={profileImage}
-										className={classes.img}
+									<Avatar
+										src={user.avatarUrl}
+										// className={classes.img}
+										style={{
+											width: "30px",
+											height: "30px",
+										}}
 										alt="profile"
 									/>
 								}
@@ -446,7 +495,11 @@ export default function SectionNavbars(props) {
 										classes.imageDropdownButton,
 									color: "transparent",
 								}}
-								dropdownList={listDownNotLogin}
+								dropdownList={
+									!user.isLogin
+										? listDownNotLogin
+										: listDownAfterLogin
+								}
 							/>
 						</div>
 						<div className={classes.cartBox}>

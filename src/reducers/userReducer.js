@@ -5,6 +5,7 @@ const initState = {
 	avatar: "",
 	role: "",
 	address: {},
+	isLogin: false,
 };
 
 const UserReducers = (state = initState, action) => {
@@ -13,6 +14,7 @@ const UserReducers = (state = initState, action) => {
 			return {
 				...state,
 				...action.payload,
+				isLogin: true,
 			};
 		case "RESET_INFO":
 			return {

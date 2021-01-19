@@ -1,37 +1,38 @@
 import { CartApi } from "apis/CartApi";
-export const getCart = async () => {
-	let data = null;
-	const response = await CartApi.GetCart();
-	if (response && response.status === 200) {
-		data = response.data;
-	}
-	return {
-		type: "SET_CART",
-		payload: data,
+export const addProduct = (payload) => {
+	return async (dispatch) => {
+		const response = await CartApi.AddProductToCart(payload);
+		if (response) {
+			dispatch({
+				type: "ADD_PRODUCT",
+				payload: payload.quantity,
+			});
+		}
 	};
 };
 
-export const updateProductCart = async (payload) => {
-	let data = null;
-	const response = await CartApi.AddProductToCart(payload);
-	if (response && response.status === 200) {
-		data = response.data;
-	}
-	return {
-		type: "UPDATE_CART",
-		payload: data,
+export const getTotalProduct = () => {
+	return async (dispatch) => {
+		const response = await CartApi.GetTotalByUserToken();
+		if (response) {
+			dispatch({
+				type: "ADD_PRODUCT",
+				payload: response,
+			});
+		}
 	};
 };
 
-export const deleteProductCart = async (payload) => {
-	let isDelete = false;
-	const response = await CartApi.DeleteProductToCart(payload);
-	if (response && response.status === 200) {
-		isDelete = true;
-	}
-	console.log(isDelete);
+export const deleteProductToCart = (payload) => {
 	return {
 		type: "DELETE_PRODUCT",
-		payload,
+		payload: payload,
+	};
+};
+
+export const addNumberProduct = (payload) => {
+	return {
+		type: "ADD_PRODUCT",
+		payload: payload,
 	};
 };

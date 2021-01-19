@@ -26,6 +26,11 @@ const HomePageStyle = makeStyles(() => ({
 		position: "relative",
 		zIndex: "3",
 	},
+	products: {
+		flex: "100%",
+		display: "flex",
+		flexFlow: "row wrap",
+	},
 	mainRaised: {
 		margin: "-60px 30px 0px",
 		borderRadius: "6px",

@@ -22,6 +22,7 @@ import { useDispatch, useSelector } from "react-redux";
 import Page from "components/Page/index.js";
 import { toastifySuccess } from "helpers/toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { toastifyError } from "helpers/toastify.js";
 // import { toast } from "react-toastify";
 // toast.configure();
 //Validate schema
@@ -33,9 +34,9 @@ const schema = yup.object().shape({
 const SignInPage = () => {
 	const dispatch = useDispatch();
 	const navigate = useNavigate();
-	const email = useSelector((state) => state.UserReducers.email);
+	const user = useSelector((state) => state.UserReducers);
 	React.useEffect(() => {
-		if (email) {
+		if (user.isLogin) {
 			navigate("/");
 		}
 	}, []);
@@ -46,6 +47,8 @@ const SignInPage = () => {
 				dispatch(SetInfo(response));
 				navigate("/");
 				toastifySuccess("Login Success");
+			} else {
+				toastifyError("Email or password is incorrect");
 			}
 		} catch (error) {
 			console.error(error);
@@ -119,13 +122,13 @@ const SignInPage = () => {
 						<Grid container>
 							<Grid item xs>
 								<LinkControl
-									path={"/reset-password"}
+									path={"/auth/reset-password"}
 									label={"Forgot password?"}
 								/>
 							</Grid>
 							<Grid item>
 								<LinkControl
-									path={"/signup"}
+									path={"/auth/signup"}
 									label={"Don't have an account? Sign Up"}
 								/>
 							</Grid>

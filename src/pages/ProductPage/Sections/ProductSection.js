@@ -1,7 +1,8 @@
+/* eslint-disable react/prop-types */
 import { makeStyles } from "@material-ui/core";
-import productsImage from "assets/img/faces/product.jpg";
 import React from "react";
 import { Link } from "react-router-dom";
+import fomatPrice from "helpers/convertPrice";
 const useStyles = makeStyles(() => ({
 	root: {
 		display: "flex",
@@ -24,23 +25,27 @@ const useStyles = makeStyles(() => ({
 		},
 	},
 }));
-function ProductSection() {
+function ProductSection(props) {
+	const { product } = props;
 	const classes = useStyles();
 	return (
-		<Link className={classes.productDetail} to={"/productDetails"}>
+		<Link
+			className={classes.productDetail}
+			to={`product/details?id=${product.id}`}
+		>
 			<div className={classes.root}>
 				<div className={classes.imgBox}>
 					<img
 						alt={"products"}
-						src={productsImage}
+						src={product.imageUrl}
 						className={classes.image}
 					/>
 				</div>
 				<div className={classes.description}>
-					<h4>Shoes Nike</h4>
+					<h4>{product.name}</h4>
 				</div>
 				<div className={classes.price}>
-					<span>¥17,600</span>
+					<span>{fomatPrice(product.price) + " VND"}</span>
 				</div>
 			</div>
 		</Link>

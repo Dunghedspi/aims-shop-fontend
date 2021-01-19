@@ -158,25 +158,23 @@ const useStyles = makeStyles(() => ({
 	},
 }));
 function ProductSliderSection(props) {
-	const { id } = props;
+	const { id, products } = props;
 	const classes = useStyles();
 	const [offsetX, setOffsetX] = useState(0);
 	const renderProducts = () => {
-		let list = [];
-		for (let i = 0; i < 10; i++) {
-			list.push(
+		return products.map((product, index) => {
+			return (
 				<li
 					aria-hidden="false"
 					data-in-view="true"
-					data-index={i}
+					data-index={index}
 					className={classes.silde}
-					key={i}
+					key={index}
 				>
-					<ProductSection />
+					<ProductSection product={product} />
 				</li>
 			);
-		}
-		return list;
+		});
 	};
 	const handelClickPrevBtn = () => {
 		if (offsetX < 0) {

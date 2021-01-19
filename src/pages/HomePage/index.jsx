@@ -10,11 +10,13 @@ import GridItem from "components/Grid/GridItem.js";
 import Page from "components/Page";
 import Parallax from "components/Parallax/Parallax.js";
 import React from "react";
-import { UserApi } from "apis/UserApi";
+import { ProductApi } from "apis/ProductApi";
+import ProductSection from "./Sections/ProductSection";
+
 // Sections for this page
 
 import bg from "assets/img/bg7.jpg";
-import TrendingSection from "./Sections/ProductSection.js";
+import TrendingSection from "./ProductSection.js";
 import TeamSection from "./Sections/TeamSection.js";
 import { getCookie } from "helpers/cookies";
 export default function LandingPage() {
@@ -30,6 +32,23 @@ export default function LandingPage() {
 				.classList.add(classes.mainRaised);
 		}
 	});
+	const [products, setProducts] = React.useState([]);
+	React.useEffect(() => {
+		const getProducts = async () => {
+			const response = await ProductApi.GetProductRandom();
+			console.log(response);
+			if (response) {
+				setProducts(response);
+			}
+		};
+		getProducts();
+	}, []);
+	const renderProducts = (products) => {
+		return products.map((product, index) => {
+			return <ProductSection key={index} product={product} />;
+		});
+	};
+
 	const classes = useStyles();
 	return (
 		<Page title="Home Page" className={classes.root}>
@@ -60,7 +79,11 @@ export default function LandingPage() {
 						<GridItem xs={12}>
 							<h4>Trending</h4>
 						</GridItem>
-						<GridItem xs={12}></GridItem>
+						<GridItem xs={12}>
+							<div className={classNames(classes.products)}>
+								{renderProducts(products)}
+							</div>
+						</GridItem>
 					</GridContainer>
 					<TeamSection />
 				</div>
